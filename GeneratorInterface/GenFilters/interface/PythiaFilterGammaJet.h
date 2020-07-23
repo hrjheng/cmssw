@@ -23,35 +23,35 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-namespace edm {
-  class HepMCProduct;
+namespace edm
+{
+    class HepMCProduct;
 }
 
-class PythiaFilterGammaJet : public edm::EDFilter {
-   public:
-      explicit PythiaFilterGammaJet(const edm::ParameterSet&);
-      ~PythiaFilterGammaJet();
+class PythiaFilterGammaJet : public edm::EDFilter
+{
+public:
+    explicit PythiaFilterGammaJet(const edm::ParameterSet &);
+    ~PythiaFilterGammaJet();
 
-      virtual bool filter(edm::Event&, const edm::EventSetup&);
+    virtual bool filter(edm::Event &, const edm::EventSetup &);
 
-   private:
-      
-       edm::EDGetTokenT<edm::HepMCProduct> token_;
-       double etaMax;
-       double ptSeed;
-       double ptMin;
-       double ptMax;
-       double dphiMin;
-       double detaMax;
-       double etaPhotonCut2;
+private:
+    edm::EDGetTokenT<edm::HepMCProduct> token_;
+    double etaMax;
+    double ptSeed;
+    double ptMin;
+    double ptMax;
+    double dphiMin;
+    double detaMax;
+    double etaPhotonCut2;
 
-       double cone;
-       double ebEtaMax;
-       double deltaEB;
-       double deltaEE;
+    double cone;
+    double ebEtaMax;
+    double deltaEB;
+    double deltaEE;
 
-       int theNumberOfSelected;
-       int maxnumberofeventsinrun;
-
+    int theNumberOfSelected;
+    int maxnumberofeventsinrun;
 };
 #endif
