@@ -1,19 +1,16 @@
-#ifndef PYTHIAFILTERGAMMAGAMMA_h
-#define PYTHIAFILTERGAMMAGAMMA_h
+#ifndef HDalitzEMEnrichingFilter_h
+#define HDalitzEMEnrichingFilter_h
 
-//
-// Package:    GeneratorInterface/GenFilters
-// Class:      PythiaFilterGammaGamma
-//
-// Original Author:  Matteo Sani
-//
-//
+// system include files
+#include <memory>
 
+// user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/global/EDFilter.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 namespace edm
@@ -21,11 +18,11 @@ namespace edm
     class HepMCProduct;
 }
 
-class PythiaFilterGammaGamma : public edm::global::EDFilter<>
+class HDalitzEMEnrichingFilter : public edm::global::EDFilter<>
 {
 public:
-    explicit PythiaFilterGammaGamma(const edm::ParameterSet &);
-    ~PythiaFilterGammaGamma() override;
+    explicit HDalitzEMEnrichingFilter(const edm::ParameterSet &);
+    ~HDalitzEMEnrichingFilter() override;
 
     bool filter(edm::StreamID, edm::Event &, const edm::EventSetup &) const override;
 
