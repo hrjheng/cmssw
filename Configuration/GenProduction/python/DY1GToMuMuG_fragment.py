@@ -23,3 +23,26 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
                              parameterSets = cms.vstring('processParameters')
                          )
 )
+
+genParticlesForFilter = cms.EDProducer("GenParticleProducer",
+    saveBarCodes = cms.untracked.bool(True),
+    src = cms.InputTag("generator", "unsmeared"),
+    abortOnUnknownPDGCode = cms.untracked.bool(False)
+)
+
+emenrichingfilter = cms.EDFilter("EMEnrichingFilter",
+                                 filterAlgoPSet = cms.PSet(isoGenParETMin=cms.double(20.),
+                                                           isoGenParConeSize=cms.double(0.1),
+                                                           clusterThreshold=cms.double(20.),
+                                                           isoConeSize=cms.double(0.2),
+                                                           hOverEMax=cms.double(0.5),
+                                                           tkIsoMax=cms.double(5.),
+                                                           caloIsoMax=cms.double(10.),
+                                                           requireTrackMatch=cms.bool(False),
+                                                           genParSource = cms.InputTag("genParticlesForFilter")
+                                                           )
+                                 )
+    
+
+# add your filters to this sequence
+ProductionFilterSequence = cms.Sequence(generator * (genParticlesForFilter + emenrichingfilter))
