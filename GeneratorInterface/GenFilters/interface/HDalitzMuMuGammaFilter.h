@@ -1,5 +1,5 @@
-#ifndef HDalitzEMEnrichingFilter_h
-#define HDalitzEMEnrichingFilter_h
+#ifndef HDalitzMuMuGammaFilter_h
+#define HDalitzMuMuGammaFilter_h
 
 // system include files
 #include <memory>
@@ -13,29 +13,43 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+/* 
+
+ Description: Modified from deprecated filter ZgammaMassFilter
+     
+*/
+
 namespace edm
 {
-    class HepMCProduct;
+class HepMCProduct;
 }
 
-class HDalitzEMEnrichingFilter : public edm::global::EDFilter<>
+class HDalitzMuMuGammaFilter : public edm::EDFilter
 {
 public:
-    explicit HDalitzEMEnrichingFilter(const edm::ParameterSet &);
-    ~HDalitzEMEnrichingFilter() override;
+    explicit HDalitzMuMuGammaFilter(const edm::ParameterSet &);
+    ~HDalitzMuMuGammaFilter();
 
-    bool filter(edm::StreamID, edm::Event &, const edm::EventSetup &) const override;
+    virtual bool filter(edm::Event &, const edm::EventSetup &);
 
 private:
-    const edm::EDGetTokenT<edm::HepMCProduct> token_;
-    const int maxEvents;
+    // ----------memeber function----------------------
+    int charge(const int &Id);
 
-    const double ptSeedThr, etaSeedThr, ptGammaThr, etaGammaThr, ptTkThr, etaTkThr;
-    const double ptElThr, etaElThr, dRTkMax, dRSeedMax, dPhiSeedMax, dEtaSeedMax, dRNarrowCone, pTMinCandidate1, pTMinCandidate2, etaMaxCandidate;
-    const double invMassMin, invMassMax;
-    const double energyCut;
-    const int nTkConeMax, nTkConeSum;
-    const bool acceptPrompts;
-    const double promptPtThreshold;
+    // ----------member data ---------------------------
+
+    edm::EDGetTokenT<edm::HepMCProduct> token_;
+
+    double minPhotonPt;
+    double minLeptonPt;
+
+    double minPhotonEta;
+    double minLeptonEta;
+
+    double maxPhotonEta;
+    double maxLeptonEta;
+
+    double minDimuMass;
+    double minMMGMass;
 };
 #endif
