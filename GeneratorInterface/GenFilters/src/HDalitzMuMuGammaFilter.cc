@@ -26,17 +26,17 @@ using namespace edm;
 using namespace std;
 using namespace HepMC;
 
-HDalitzMuMuGammaFilter::HDalitzMuMuGammaFilter(const edm::ParameterSet &iConfig)
+HDalitzMuMuGammaFilter::HDalitzMuMuGammaFilter(const edm::ParameterSet &iConfig) : token_(consumes<edm::HepMCProduct>(edm::InputTag(iConfig.getUntrackedParameter("moduleLabel", std::string("generator")), "unsmeared"))),
+                                                                                   minPhotonPt(iConfig.getParameter<double>("minPhotonPt")),
+                                                                                   minLeptonPt(iConfig.getParameter<double>("minLeptonPt")),
+                                                                                   minPhotonEta(iConfig.getParameter<double>("minPhotonEta")),
+                                                                                   minLeptonEta(iConfig.getParameter<double>("minLeptonEta")),
+                                                                                   maxPhotonEta(iConfig.getParameter<double>("maxPhotonEta")),
+                                                                                   maxLeptonEta(iConfig.getParameter<double>("maxLeptonEta")),
+                                                                                   minDimuMass(iConfig.getParameter<double>("minDimuMass")),
+                                                                                   maxDimuMass(iConfig.getParameter<double>("maxDimuMass")),
+                                                                                   minMMGMass(iConfig.getParameter<double>("minMMGMass"))
 {
-    token_ = consumes<edm::HepMCProduct>(iConfig.getParameter<InputTag>("HepMCProduct"));
-    minPhotonPt = iConfig.getParameter<double>("minPhotonPt");
-    minLeptonPt = iConfig.getParameter<double>("minLeptonPt");
-    minPhotonEta = iConfig.getParameter<double>("minPhotonEta");
-    minLeptonEta = iConfig.getParameter<double>("minLeptonEta");
-    maxPhotonEta = iConfig.getParameter<double>("maxPhotonEta");
-    maxLeptonEta = iConfig.getParameter<double>("maxLeptonEta");
-    minDimuMass = iConfig.getParameter<double>("minDimuMass");
-    minMMGMass = iConfig.getParameter<double>("minMMGMass");
 }
 
 HDalitzMuMuGammaFilter::~HDalitzMuMuGammaFilter()
@@ -106,11 +106,20 @@ bool HDalitzMuMuGammaFilter::filter(edm::Event &iEvent, const edm::EventSetup &i
     //  }
     //  std::cout << "\n" << std::endl;
 
-    if (!Photon.empty() && Muon.size() > 1 && Photon[0].Pt() > minPhotonPt && Muon[0].Pt() > minLeptonPt &&
-        Muon[1].Pt() > minLeptonPt && Photon[0].Eta() > minPhotonEta && Muon[0].Eta() > minLeptonEta &&
-        Muon[1].Eta() > minLeptonEta && Photon[0].Eta() < maxPhotonEta && Muon[0].Eta() < maxLeptonEta &&
-        Muon[1].Eta() < maxLeptonEta && (Muon[0] + Muon[1]).M() > minDileptonMass &&
-        (Muon[0] + Muon[1] + Photon[0]).M() > minZgMass)
+    if (!Photon.empty() &&
+        Muon.size() > 1 &&
+        Photon[0].Pt() >= minPhotonPt &&
+        Muon[0].Pt() >= minLeptonPt &&
+        Muon[1].Pt() >= minLeptonPt &&
+        Photon[0].Eta() >= minPhotonEta &&
+        Muon[0].Eta() >= minLeptonEta &&
+        Muon[1].Eta() >= minLeptonEta &&
+        Photon[0].Eta() <= maxPhotonEta &&
+        Muon[0].Eta() <= maxLeptonEta &&
+        Muon[1].Eta() <= maxLeptonEta &&
+        (Muon[0] + Muon[1]).M() >= minDimuMass &&
+        (Muon[0] + Muon[1]).M() <= maxDimuMass &&
+        (Muon[0] + Muon[1] + Photon[0]).M() > minMMGMass)
     { // satisfy molteplicity, kinematics, and ll llg minimum mass
         accepted = true;
     }
