@@ -25,15 +25,15 @@
 
 #include "GeneratorInterface/GenFilters/interface/EMEnrichingFilterAlgo.h"
 
-class EMEnrichingFilter : public edm::EDFilter {
- public:
-  explicit EMEnrichingFilter(const edm::ParameterSet&);
-  ~EMEnrichingFilter();
-  
-  virtual bool filter(edm::Event&, const edm::EventSetup&);
-  
- private:
-  EMEnrichingFilterAlgo *EMEAlgo_;
-  
+class EMEnrichingFilter : public edm::EDFilter
+{
+public:
+    explicit EMEnrichingFilter(const edm::ParameterSet &);
+    ~EMEnrichingFilter();
+
+    virtual bool filter(edm::Event &, const edm::EventSetup &);
+
+private:
+    EMEnrichingFilterAlgo *EMEAlgo_;
 };
 #endif
